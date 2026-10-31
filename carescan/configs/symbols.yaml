@@ -1,0 +1,152 @@
+# CareScan symbol classes — single source of truth.
+# The ORDER of this list defines the YOLO class ids (0, 1, 2, ...).
+# Do not reorder after labelling starts; only append new classes at the end.
+#
+# Based on ISO 3758:2023 / GINETEX care labelling symbols.
+#
+# Fields:
+#   name        class name used in Roboflow labels and YOLO output
+#   category    washing | bleaching | tumble_drying | natural_drying | ironing | professional
+#   meaning     what the symbol looks like (labelling help)
+#   instruction plain-language advice shown to the user
+#   max_temp    (washing / ironing only) highest allowed temperature in °C, 0 = not allowed
+
+symbols:
+  # ---------------- Washing (washtub) ----------------
+  - name: wash_30
+    category: washing
+    meaning: Washtub with "30" (or 1 dot), no bar
+    instruction: Machine wash at 30°C or below, normal cycle.
+    max_temp: 30
+  - name: wash_30_gentle
+    category: washing
+    meaning: Washtub with "30" and one or two bars underneath
+    instruction: Machine wash at 30°C or below on a gentle / delicates cycle.
+    max_temp: 30
+    gentle: true
+  - name: wash_40
+    category: washing
+    meaning: Washtub with "40" (or 2 dots), no bar
+    instruction: Machine wash at 40°C or below, normal cycle.
+    max_temp: 40
+  - name: wash_40_gentle
+    category: washing
+    meaning: Washtub with "40" and one or two bars underneath
+    instruction: Machine wash at 40°C or below on a gentle / synthetics cycle.
+    max_temp: 40
+    gentle: true
+  - name: wash_60
+    category: washing
+    meaning: Washtub with "60" (or 4 dots)
+    instruction: Machine wash at 60°C or below.
+    max_temp: 60
+  - name: wash_95
+    category: washing
+    meaning: Washtub with "95" (or 6 dots)
+    instruction: Can be washed hot, up to 95°C.
+    max_temp: 95
+  - name: wash_hand
+    category: washing
+    meaning: Washtub with a hand
+    instruction: Hand wash only in lukewarm water (max 40°C). Do not rub or wring.
+    max_temp: 40
+    gentle: true
+  - name: no_wash
+    category: washing
+    meaning: Washtub crossed out
+    instruction: Do not wash with water at home.
+    max_temp: 0
+
+  # ---------------- Bleaching (triangle) ----------------
+  - name: bleach_any
+    category: bleaching
+    meaning: Empty triangle
+    instruction: Any bleach can be used.
+  - name: bleach_non_chlorine
+    category: bleaching
+    meaning: Triangle with two diagonal lines
+    instruction: Use only oxygen / non-chlorine bleach.
+  - name: no_bleach
+    category: bleaching
+    meaning: Filled triangle crossed out
+    instruction: Do not bleach.
+
+  # ---------------- Tumble drying (square with circle) ----------------
+  - name: tumble_low
+    category: tumble_drying
+    meaning: Square with circle and one dot
+    instruction: Tumble dry on low heat.
+  - name: tumble_normal
+    category: tumble_drying
+    meaning: Square with circle and two dots (or empty circle)
+    instruction: Tumble dry on normal heat.
+  - name: no_tumble
+    category: tumble_drying
+    meaning: Square with circle, crossed out
+    instruction: Do not tumble dry.
+
+  # ---------------- Natural drying (square with lines) ----------------
+  - name: dry_line
+    category: natural_drying
+    meaning: Square with a curved line at the top
+    instruction: Hang on a line to dry.
+  - name: dry_drip
+    category: natural_drying
+    meaning: Square with three vertical lines
+    instruction: Hang to drip dry while still wet — do not spin or wring.
+  - name: dry_flat
+    category: natural_drying
+    meaning: Square with one horizontal line
+    instruction: Lay flat to dry so it keeps its shape.
+  - name: dry_shade
+    category: natural_drying
+    meaning: Square with two diagonal lines in the top-left corner
+    instruction: Dry in the shade, away from direct sunlight.
+
+  # ---------------- Ironing (iron) ----------------
+  - name: iron_low
+    category: ironing
+    meaning: Iron with one dot
+    instruction: Iron on low heat (max 110°C), no steam.
+    max_temp: 110
+  - name: iron_med
+    category: ironing
+    meaning: Iron with two dots
+    instruction: Iron on medium heat (max 150°C).
+    max_temp: 150
+  - name: iron_high
+    category: ironing
+    meaning: Iron with three dots
+    instruction: Iron on high heat (max 200°C).
+    max_temp: 200
+  - name: no_iron
+    category: ironing
+    meaning: Iron crossed out
+    instruction: Do not iron.
+    max_temp: 0
+
+  # ---------------- Professional care (circle) ----------------
+  - name: dryclean_P
+    category: professional
+    meaning: Circle with letter P
+    instruction: Can be professionally dry-cleaned (standard solvents).
+  - name: dryclean_F
+    category: professional
+    meaning: Circle with letter F
+    instruction: Can be professionally dry-cleaned with petroleum solvents only.
+  - name: dryclean_any
+    category: professional
+    meaning: Circle with letter A (older labels) or empty circle
+    instruction: Can be dry-cleaned with any solvent.
+  - name: no_dryclean
+    category: professional
+    meaning: Circle crossed out
+    instruction: Do not dry-clean.
+  - name: wetclean_W
+    category: professional
+    meaning: Circle with letter W
+    instruction: Can be professionally wet-cleaned.
+  - name: no_wetclean
+    category: professional
+    meaning: Circle with letter W, crossed out
+    instruction: Do not professionally wet-clean.

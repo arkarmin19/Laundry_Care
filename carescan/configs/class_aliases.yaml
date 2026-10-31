@@ -1,0 +1,181 @@
+# Map class names used in downloaded datasets -> CareScan class names.
+#
+# merge_datasets.py lowercases each source name and replaces spaces/dashes with
+# "_" before looking it up here (e.g. "DN_Bleach" -> "dn_bleach").
+#
+# Values:
+#   <carescan name>  rename the box to this class (see configs/symbols.yaml)
+#   drop             remove these boxes, keep the image. Use for symbols we don't
+#                    support and also don't box in our own photos (steam, wring...).
+#   skip             leave out every IMAGE containing this class. Use when the
+#                    symbol IS one of ours but we can't tell which class it is,
+#                    so keeping the image would teach the model wrong labels.
+#
+# Any source name NOT listed here and not already a CareScan name is reported as
+# UNMAPPED and its images are left out. Add it here and run the merge again.
+#
+# Each key must appear only once in this file.
+
+aliases:
+  # =====================================================================
+  # Dataset: care-label-x5z3u-v4l3g (v1, 46 classes, CC BY 4.0)
+  # Forked into wasabis-workspace from Roboflow Universe.
+  # =====================================================================
+
+  # --- washing: temperature classes ---
+  "30c": wash_30
+  "40c": wash_40
+  "50c": wash_40            # we have no 50 class; washing cooler is safe
+  "60c": wash_60
+  "70c": wash_60            # rare; cooler is safe
+  "95c": wash_95
+  hand_wash: wash_hand
+  dn_wash: no_wash
+
+  # --- washing: cycle classes (CHECK BEFORE TRAINING, see notes below) ---
+  # These washtubs carry the cycle (bars) but maybe no temperature, and our classes
+  # need a temperature. Left out until we have looked at some images.
+  machine_wash_normal: skip
+  machine_wash_permanent_press: skip   # 1 bar under the washtub
+  machine_wash_delicate: skip          # 2 bars under the washtub
+
+  # --- bleaching ---
+  bleach: bleach_any
+  chlorine_bleach: bleach_any          # triangle with "Cl": any bleach incl. chlorine
+  non_chlorine_bleach: bleach_non_chlorine
+  dn_bleach: no_bleach
+
+  # --- tumble drying ---
+  tumble_dry_no_heat: tumble_low       # filled circle; low heat is the closest safe class
+  tumble_dry_low: tumble_low
+  tumble_dry_medium: tumble_normal
+  tumble_dry_normal: tumble_normal
+  dn_tumble_dry: no_tumble
+
+  # --- natural drying ---
+  line_dry: dry_line
+  drip_dry: dry_drip
+  # dry_flat is already our own class name, no alias needed
+  shade_dry: dry_shade
+  line_dry_in_shade: dry_shade         # one box for the whole symbol, labelled by the shade lines
+  natural_dry: drop                    # plain empty square ("dry any way"): not one of our classes
+  dn_dry: drop                         # crossed square: not one of our classes
+
+  # --- ironing ---
+  iron: iron_high                      # plain iron with no dots = any temperature
+  iron_low: iron_low
+  iron_medium: iron_med
+  iron_high: iron_high
+  dn_iron: no_iron
+  dn_steam: drop                       # steam symbols are not boxed in our photos
+
+  # --- professional care ---
+  dry_clean: dryclean_any              # plain circle
+  dry_clean_any_solvent: dryclean_any  # circle with A
+  dry_clean_any_solvent_execpt_tricholoroethylene: dryclean_P   # circle with P (typo is in the dataset)
+  dry_clean_petrol_only: dryclean_F    # circle with F
+  dn_dry_clean: no_dryclean
+  wet_clean: wetclean_W
+  # Dry-clean with extra conditions: we can't tell the letter from the class name.
+  dry_clean_low_heat: skip
+  dry_clean_no_steam: skip
+  dry_clean_reduced_moisture: skip
+  dry_clean_short_cycle: skip
+
+  # --- not supported ---
+  wring: drop
+  dn_wring: drop
+  dn_wiring: drop                      # typo for dn_wring in the dataset
+
+  # =====================================================================
+  # Dataset 2 (74 classes). Shares most names with the dataset above;
+  # only the NEW names are listed here.
+  # =====================================================================
+
+  # --- washing with bars (delicate = 1 bar, very_delicate = 2 bars) ---
+  30c_delicate: wash_30_gentle
+  30c_very_delicate: wash_30_gentle
+  40c_delicate: wash_40_gentle
+  40c_very_delicate: wash_40_gentle
+  # No 60/95 gentle class. Mapping to wash_60 would lose "gentle", mapping to a
+  # 40 class would teach the model that "60" means 40. Rare -> leave them out.
+  60c_delicate: skip
+  60c_very_delicate: skip
+  95c_delicate: skip
+  95c_very_delicate: skip
+
+  # --- drying in shade: one box for the whole symbol (see labelling guide) ---
+  drip_dry_in_shade: dry_shade
+  dry_flat_in_shade: dry_shade
+
+  # --- tumble drying ---
+  tumble_dry_high: tumble_normal       # no high class; "normal" heat is the hottest we have
+  tumble_dry_low_delicate: tumble_low
+
+  # --- professional care (bars under the circle are ignored, as in our guide) ---
+  dry_clean_any_solvent_except_trichloroethylene: dryclean_P            # circle with P
+  dry_clean_any_solvent_except_trichloroethylene_delicate: dryclean_P
+  dry_clean_petrol_only_delicate: dryclean_F
+  dry_clean_petrol_only_very_delicate: dryclean_F
+  wet_clean_delicate: wetclean_W
+  wet_clean_very_delicate: wetclean_W
+  dn_wet_clean: no_wetclean
+
+  # --- "ER_" classes: meaning unknown, CHECK in Roboflow before using ---
+  er_5: skip
+  er_15: skip
+  er_18: skip
+  er_21: skip
+  er_25: skip
+  er_27: skip
+  er_37: skip
+  er_38: skip
+  er_42: skip
+  er_52: skip
+
+  # =====================================================================
+  # Common names in other laundry datasets (examples; check each new dataset)
+  # =====================================================================
+  "30": wash_30
+  wash30: wash_30
+  machine_wash_30: wash_30
+  "40": wash_40
+  wash40: wash_40
+  machine_wash_40: wash_40
+  "60": wash_60
+  wash60: wash_60
+  machine_wash_60: wash_60
+  "95": wash_95
+  handwash: wash_hand
+  do_not_wash: no_wash
+  not_wash: no_wash
+  dont_wash: no_wash
+  any_bleach: bleach_any
+  only_non_chlorine_bleach: bleach_non_chlorine
+  do_not_bleach: no_bleach
+  dont_bleach: no_bleach
+  tumble_dry_low_heat: tumble_low
+  tumble_dry: tumble_normal
+  do_not_tumble_dry: no_tumble
+  dont_tumble_dry: no_tumble
+  hang_dry: dry_line
+  flat_dry: dry_flat
+  dry_in_shade: dry_shade
+  iron_low_temperature: iron_low
+  iron_1_dot: iron_low
+  iron_medium_temperature: iron_med
+  iron_2_dots: iron_med
+  iron_high_temperature: iron_high
+  iron_3_dots: iron_high
+  do_not_iron: no_iron
+  dont_iron: no_iron
+  dry_clean_p: dryclean_P
+  p: dryclean_P
+  dry_clean_f: dryclean_F
+  f: dryclean_F
+  do_not_dry_clean: no_dryclean
+  dont_dry_clean: no_dryclean
+  do_not_wet_clean: no_wetclean
+  steam: drop
+  no_steam: drop
+  do_not_wring: drop
